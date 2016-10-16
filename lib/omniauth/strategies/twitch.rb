@@ -38,6 +38,13 @@ module OmniAuth
           raw_info: raw_info
         }
       end
+	  
+	  alias :old_request_phase :request_phase
+
+      def request_phase 
+        options[:authorize_params].merge!(:force_verify => 'true')
+        old_request_phase
+      end
 
       def raw_info
         @raw_info ||= access_token.get('/kraken/user.json').parsed
